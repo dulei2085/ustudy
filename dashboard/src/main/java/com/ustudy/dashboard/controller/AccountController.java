@@ -10,7 +10,6 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ustudy.dashboard.model.Account;
@@ -26,9 +25,9 @@ public class AccountController {
 	private AccountService ac;
 	
 	@RequiresAuthentication
-	@RequiresRoles(value={"user"})
+	@RequiresRoles(value={"admin"})
 	@RequiresPermissions("dashboard:view")
-	@RequestMapping(value = "/list/", method = RequestMethod.GET)
+	@RequestMapping("/list")
 	@Transactional
 	public List<Account> list() {
 
