@@ -5,8 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -23,7 +23,7 @@ import com.ustudy.dashboard.services.AccountService;
 @RequestMapping(value = "/users")
 public class AccountController {
 
-	private static final Logger logger = LogManager.getLogger(AccountController.class);
+	private static final Log logger = LogFactory.getLog(AccountController.class);
 	
 	@Autowired
 	private AccountService accountService;

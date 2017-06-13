@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,7 +19,7 @@ import com.ustudy.dashboard.model.Account;
 @Service
 public class AccountService {
 
-	private static final Logger logger = LogManager.getLogger(AccountService.class);
+	private static final Log logger = LogFactory.getLog(AccountService.class);
 	
 	private SimpleDateFormat SDF = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 	
@@ -117,10 +117,13 @@ public class AccountService {
 	}
 	
 	public boolean deleteUserById(int id) {
-		String sql = "DELETE from sec_users where id=" + id + ";";
+		String sql = "DELETE from sec_users where id=" + id;
+		String ur_sql = "DELETE from sec_user_role where uid=" + id;
 		try {
 			logger.info(sql);
 			jdbcT.execute(sql);
+			logger.info(ur_sql);
+			jdbcT.execute(ur_sql);
 			return true;
 		} catch (Exception e) {
 			logger.debug(e.getMessage());
@@ -129,10 +132,13 @@ public class AccountService {
 	}
 	
 	public boolean deleteUserByIds(String ids) {
-		String sql = "DELETE from sec_users where id in (" + ids + ");";
+		String sql = "DELETE from sec_users where id in (" + ids + ")";
+		String ur_sql = "DELETE from sec_user_role where uid in (" + ids + ")";
 		try {
 			logger.info(sql);
 			jdbcT.execute(sql);
+			logger.info(ur_sql);
+			jdbcT.execute(ur_sql);
 			return true;
 		} catch (Exception e) {
 			logger.debug(e.getMessage());
@@ -241,15 +247,38 @@ public class AccountService {
 		return false;
 	}
 	
-	public static void main(String[] args) {
-		Account account = new Account(13 ,"name", "loginname", "pswd", "email", "phone", null, null, 1);
-		AccountService service = new AccountService();
-		//service.list(account, "2017-06-01 00:00:00", "2017-06-30 00:00:00");
-		//service.findUserByLoginName("admin");
-		//service.findUserById(1);
-		//service.deleteUserByIds("123");
-		//service.insertUser(account);
-		service.updateUser(account);
+	public boolean addRoles(int userId,String roleId) {
+		if(userId > 0 && null != roleId){
+			StringBuffer sql = new StringBuffer("insert into sec_user_role (uid,rid) values");
+			String[] roleIds = roleId.split(",");
+			for (String id : roleIds) {
+				sql.append("("+userId+","+id+"),");
+			}
+			try {
+				logger.info(sql.toString());
+				jdbcT.update(sql.substring(0,sql.length()-1));
+				return true;
+			} catch (Exception e) {
+				logger.debug(e.getMessage());
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean deleteRoles(int userId,String roleId) {
+		if(userId > 0 && null != roleId){
+			StringBuffer sql = new StringBuffer("delete from sec_user_role where uid=" + userId + " and rid in ("+roleId+")");
+			try {
+				logger.info(sql.toString());
+				jdbcT.update(sql.toString());
+				return true;
+			} catch (Exception e) {
+				logger.debug(e.getMessage());
+			}
+		}
+		
+		return false;
 	}
 	
 }
