@@ -21,7 +21,7 @@ public class LoginController {
 	private static final Logger LOGGER = LogManager.getLogger(LoginController.class);
 	
 	/**
-	 * 验证用户名和密码
+	 * login
 	 * @param request
 	 * @return
 	 */
@@ -51,7 +51,7 @@ public class LoginController {
 	}
   
     /**
-     * 退出
+     * logout
      * @return
      */
     @RequestMapping(value = "/logout")  
