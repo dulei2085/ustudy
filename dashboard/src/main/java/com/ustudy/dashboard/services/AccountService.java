@@ -1,5 +1,6 @@
 package com.ustudy.dashboard.services;
 
+<<<<<<< HEAD
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -280,5 +281,28 @@ public class AccountService {
 		
 		return false;
 	}
+=======
+import java.util.List;
+
+import com.ustudy.dashboard.model.Account;
+
+public interface AccountService {
+
+	public List<Account> getList(int id) ;
+	
+	public Account findUserByLoginName(String login) ;
+	
+	public Account findUserById(int id) ;
+	
+	public int delItem(int id) ;
+	
+	public int delItemSet(String ids) ;
+	
+	public int createItem(Account item);
+	
+	public int updateItem(Account item, int id);
+	
+	public boolean updateLLTime(String id);
+>>>>>>> upstream/0.1.0
 	
 }

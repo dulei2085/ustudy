@@ -1,30 +1,41 @@
 package com.ustudy.dashboard.services;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Service;
-
-import com.ustudy.dashboard.model.Subject;
-import com.ustudy.dashboard.model.Grade;
+import com.ustudy.dashboard.model.OrgBrife;
 import com.ustudy.dashboard.model.School;
 
-@Service
-public class SchoolService {
+/**
+ * @author jared
+ *
+ */
 
-	private static final Logger logger = LogManager.getLogger(SchoolService.class);
+public interface SchoolService {
+
 	
-	@Autowired
-	private JdbcTemplate jdbcT;
+	/**
+	 * @param id  --- retrieve item list from id
+	 * @return
+	 */
+	public List<School> getList(int id);
 	
+	/**
+	 * @param data --- to be stored into database
+	 * @return  --- index in the datababse
+	 */
+	public int createItem(School data);
+	
+	public int deleteItem(int id);
+	
+	public School displayItem(int id);
+	
+	public int updateItem(School data, int id);
+	
+	public int delItemSet(String ids);
+	
+	public List<OrgBrife> getOrgBrifeList(int id);
+	
+<<<<<<< HEAD
 	public List<School> getList(int id) {
 		List<School> schs = null;
 		String sqlSch = "select * from school where id > ? limit 10000";
@@ -76,3 +87,6 @@ public class SchoolService {
 		return schs;
 	}
 }
+=======
+}
+>>>>>>> upstream/0.1.0

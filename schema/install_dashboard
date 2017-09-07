@@ -1,60 +1,109 @@
-set names "utf8";
-create database if not exists dashboard character set utf8;
+set names utf8;
+create database if not exists ustudy character set utf8;
 
-create table if not exists dashboard.users (
+create table if not exists ustudy.users (
 id INT NOT NULL AUTO_INCREMENT,
-loginname VARCHAR(64) NOT NULL,
-usr_passwd VARCHAR(256) NOT NULL,
-usr_passwdsalt VARCHAR(256) NOT NULL,
-PRIMARY KEY (id),
-INDEX (loginname),
-UNIQUE KEY (loginname)
-);
+loginname varchar(32) NOT NULL,
+fullname varchar(32) NOT NULL,
+passwd varchar(32) NOT NULL,
+ugroup ENUM ('运维', '市场', '代理商', '临时') NOT NULL,
+ctime datetime DEFAULT NULL,
+ll_time datetime DEFAULT NULL,
+status ENUM ('在线', '离线'),
+province varchar(32) NOT NULL,
+city varchar(32) NOT NULL,
+district varchar(32) NOT NULL,
+UNIQUE KEY (loginname),
+PRIMARY KEY (id)
+) ENGINE=InnoDB;
 
-create table if not exists dashboard.roles (
+create table if not exists ustudy.roles (
 id INT NOT NULL AUTO_INCREMENT,
-role_name VARCHAR(32) NOT NULL,
-user_id INT NOT NULL,
+value varchar(32) NOT NULL,
+user_name varchar(32) NOT NULL,
+INDEX(user_name),
 PRIMARY KEY (id),
-INDEX(user_id),
-FOREIGN KEY (user_id)
-    REFERENCES dashboard.users(id)
+FOREIGN KEY (user_name)
+    REFERENCES ustudy.users(loginname)
     ON DELETE CASCADE ON UPDATE CASCADE
-);
+) ENGINE=InnoDB;
 
-create table if not exists dashboard.permissions (
+create table if not exists ustudy.perms (
 id INT NOT NULL AUTO_INCREMENT,
-perm_name VARCHAR(64) NOT NULL,
-role_id INT NOT NULL,
-PRIMARY KEY (id),
-INDEX (role_id),
-FOREIGN KEY (role_id)
-    REFERENCES dashboard.roles (id)
-    ON DELETE CASCADE ON UPDATE CASCADE
-);
+value varchar(64) NOT NULL,
+role_name varchar(32) NOT NULL,
+INDEX (role_name),
+PRIMARY KEY(id)
+) ENGINE=InnoDB;
 
-create table if not exists dashboard.school (
+create table if not exists ustudy.orgowner (
+id INT NOT NULL AUTO_INCREMENT,
+name varchar(32) NOT NULL,
+loginname varchar(32) NOT NULL,
+passwd varchar(32) NOT NULL,
+orgtype ENUM ('学校','教研室') NOT NULL,
+orgid varchar(32) NOT NULL,
+role ENUM('校长','考务老师','教研主任') NOT NULL,
+ctime datetime DEFAULT NULL,
+PRIMARY KEY(id),
+INDEX(name,loginname)
+) ENGINE=InnoDB;
+
+create table if not exists ustudy.school (
 id INT NOT NULL AUTO_INCREMENT,
 school_id  VARCHAR(32) NOT NULL,
 school_name VARCHAR(128) NOT NULL,
-school_type ENUM('高中', '初中', '完中', '九年制', '小学', '十二年制', '补习', '其他'),
+school_type ENUM('高中', '初中', '完中', '九年制', '小学', '十二年制', '补习', '其他') NOT NULL,
 province  VARCHAR(32) NOT NULL,
 city      VARCHAR(32) NOT NULL,
 district  VARCHAR(32) NOT NULL,
 PRIMARY KEY (id),
-INDEX(school_id, school_name),
-UNIQUE KEY(school_name, school_id)
-);
+INDEX(school_name),
+UNIQUE KEY (school_id)
+) ENGINE=InnoDB;
 
-create table if not exists dashboard.course (
+create table if not exists ustudy.teacher (
+id INT NOT NULL AUTO_INCREMENT,
+teacid VARCHAR(32) NOT NULL,
+teacname VARCHAR(32) NOT NULL,
+passwd VARCHAR(32) NOT NULL,
+orgtype ENUM ('学校','教研室') NOT NULL,
+orgid VARCHAR(32) NOT NULL,
+ctime datetime DEFAULT NULL,
+ll_time datetime DEFAULT NULL,
+PRIMARY KEY(id),
+INDEX (teacid, orgid),
+UNIQUE KEY(teacid)
+) ENGINE=InnoDB;
+
+create table if not exists ustudy.grade (
 id INT NOT NULL AUTO_INCREMENT,
 grade_name VARCHAR(32) NOT NULL,
-course_name VARCHAR(32) NOT NULL,
+classes_num INT NOT NULL,
+grade_owner VARCHAR(32),
 school_id VARCHAR(32) NOT NULL,
-PRIMARY KEY (id),
+PRIMARY KEY(id),
 INDEX(school_id, grade_name),
 FOREIGN KEY (school_id)
-    REFERENCES dashboard.school(school_id)
-    ON DELETE CASCADE ON UPDATE CASCADE
-);
+    REFERENCES ustudy.school(school_id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (grade_owner)
+    REFERENCES ustudy.teacher(teacid)
+    ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+create table if not exists ustudy.gradesub (
+id INT NOT NULL AUTO_INCREMENT,
+sub_name VARCHAR(32) NOT NULL,
+grade_id INT NOT NULL,
+sub_owner VARCHAR(32),
+PRIMARY KEY(id),
+INDEX(grade_id, sub_name),
+FOREIGN KEY (grade_id)
+    REFERENCES ustudy.grade(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (sub_owner)
+    REFERENCES ustudy.teacher(teacid)
+    ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
 

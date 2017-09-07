@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
   <Properties>
@@ -16,4 +17,39 @@
       <AppenderRef ref="logfile"/>
     </Root>
   </Loggers>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Properties>
+    <Property name="logfilename">logs/dashboard.log</Property>
+  </Properties>
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{yy/MM/dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+    <File name="logfile" fileName="${logfilename}">
+      <PatternLayout pattern="%d{yy/MM/dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </File>
+  </Appenders>
+  <Loggers>
+    <Logger name="org.springframework.beans.factory" level="debug">
+        <AppenderRef ref="logfile"/>
+    </Logger>
+    <Logger name="org.springframework.transaction" level="debug">
+        <AppenderRef ref="logfile"/>
+    </Logger>
+    <Logger name="org.springframework.transaction.interceptor" level="debug">
+        <AppenderRef ref="logfile"/>
+    </Logger>
+    <Logger name="org.springframework" level="debug">
+        <AppenderRef ref="logfile"/>
+    </Logger>
+    <Logger name="org.apache.shiro" level="debug">
+        <AppenderRef ref="logfile"/>
+    </Logger>
+    <Root level="trace">
+      <AppenderRef ref="logfile"/>
+    </Root>
+  </Loggers>
+>>>>>>> upstream/0.1.0
 </Configuration>

@@ -1,7 +1,9 @@
 package com.ustudy.dashboard.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class School implements Serializable {
 
@@ -21,6 +23,12 @@ public class School implements Serializable {
 	private List<Grade> grades = null;
 
 
+	// Noted here: default constructor is required to make http.post to transfer json
+	// string into object of "school"
+	public School() {
+		super();
+	}
+
 	public School(String id, String schoolId, String schoolName, String schoolType, 
 			String province, String city, String district) {
 		super();
@@ -31,6 +39,15 @@ public class School implements Serializable {
 		this.province = province;
 		this.city = city;
 		this.district = district;
+	}
+
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getSchoolId() {
@@ -79,14 +96,43 @@ public class School implements Serializable {
 	public void setGrades(List<Grade> grades) {
 		this.grades = grades;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "School [id=" + id + ", schoolId=" + schoolId + ", schoolName=" + schoolName +
-			", schoolType="	+ schoolType + ", province=" + province + ", city=" + city +
-			", district=" + district + ", grades=" + grades + "]";
+		String tmp = new String();
+		if (grades != null) {
+			for (Grade gr: grades) {
+				tmp += "{" + gr.toString() + "},";
+			}
+		}
+		return "School [id=" + id + ", schoolId=" + schoolId + ", schoolName=" + schoolName + ", schoolType="
+				+ schoolType + ", province=" + province + ", city=" + city + ", district=" + district + ", grades="
+				+ tmp + "]";
 	}
 	
+<<<<<<< HEAD
 	
 	
 }
+=======
+	public Map<String,String> compare(School target) {
+		HashMap<String, String> comRes = new HashMap<String,String>();
+		if (target == this)
+			return null;
+		if (target.getSchoolId() != this.schoolId)
+			comRes.put("school_id", this.schoolId);
+		if (target.getSchoolName() != this.schoolName)
+			comRes.put("school_name", this.schoolName);
+		if (target.getSchoolType() != this.schoolType)
+			comRes.put("school_type", this.schoolType);
+		if (target.getProvince() != this.province)
+			comRes.put("province", this.province);
+		if (target.getCity() != this.city)
+			comRes.put("city", this.city);
+		if (target.getDistrict() != this.district)
+			comRes.put("district", this.district);
+		return comRes;
+		
+	}
+}
+>>>>>>> upstream/0.1.0
